@@ -11,23 +11,12 @@ def get_env_variable(name):
         raise Exception(message)
 
 
-POSTGRES_URL = "localhost"  # get_env_variable("POSTGRES_URL")
-POSTGRES_USER = "sheena"  # get_env_variable("POSTGRES_USER")
-POSTGRES_PW = "sheena"  # get_env_variable("POSTGRES_PW")
-POSTGRES_DB = "sp_1"  # get_env_variable("POSTGRES_DB")
-
 
 class Config(object):
 
     SECRET_KEY = os.environ.get("SECRET_KEY") or "super-secret-key"
     DEBUG = True
     CSRF_ENABLED = True
-
-    JWT_SECRET_KEY = "jwt-secret-string"
-    JWT_BLACKLIST_ENABLED = True
-    JWT_BLACKLIST_TOKEN_CHECKS = ["access", "refresh"]
-
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     WTF_CSRF_ENABLED = True
     REDIS_URL = "redis://redis:6379/0"
@@ -54,31 +43,18 @@ class Config(object):
 
 class ProductionConfig(Config):
     DEBUG = False
-    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")
     SECRET_KEY = os.environ.get("SECRET_KEY") or "prod-secret-key"
-
-
-
-# class StagingConfig(Config):
-#     DEVELOPMENT = True
-#     DEBUG = True
-#     SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")
-#     SECRET_KEY = os.environ.get("SECRET_KEY") or "staging-secret-key"
-
 
 class DevelopmentConfig(Config):
     DEVELOPMENT = True
     TESTING = False
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")
     SECRET_KEY = os.environ.get("SECRET_KEY") or "dev-secret-key"
     #ELASTIC_APM['DEBUG']=True
     
 
-
 class TestingConfig(Config):
     TESTING = True
-    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_TEST_URL")
     SECRET_KEY = os.environ.get("SECRET_KEY") or "test-secret-key"
 
 
