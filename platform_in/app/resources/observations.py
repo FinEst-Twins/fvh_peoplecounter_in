@@ -60,24 +60,38 @@ class PeopleCounterObservation(Resource):
 api.add_resource(PeopleCounterObservation, "/peoplecounter/v1")
 
 
-class TaskStatus(Resource):
-    def get(self, task_id):
-        with Connection(redis.from_url(current_app.config["REDIS_URL"])):
-            q = Queue()
-            task = q.fetch_job(task_id)
-        if task:
-            response_object = {
-                "status": "success",
-                "message": {
-                    "task_id": task.get_id(),
-                    "task_status": task.get_status(),
-                    "task_result": task.result,
-                },
-            }
-        else:
-            response_object = {"status": "error"}
-        return jsonify(response_object)
+class SolarInverterObservation(Resource):
+    def post(self):
+        """
+        Post new observation
+        """
+        data = request.get_json()
+        logging.info(f"post observation: {data}")
+        print(data)
+        
+        #kafka_producer = get_kafka_producer()
+
+    #     try:
+
+    #         #kafka_producer.produce(
+    #         #    f"{topic_prefix}.{topic}", json.dumps(observations), callback=delivery_report
+    #         #)
+    #         #kafka_producer.poll(2)
+    # except BufferError:
+    #     logging.error("local buffer full", len(kafka_producer))
+    #     elastic_apm.capture_exception()
+    #     return False
+    # except Exception as e:
+    #     elastic_apm.capture_exception()
+    #     logging.error(e)
+    #     return False
+    
+    # return True
+        response_object = {"status": "received"}
+        return response_object, 200
 
 
-api.add_resource(TaskStatus, "/taskstatus/<task_id>")
+api.add_resource(SolarInverterObservation, "/viikkisolar/observation")
+
+
 
