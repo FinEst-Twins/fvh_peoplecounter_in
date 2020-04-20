@@ -63,13 +63,13 @@ class PeopleCounterObservation(Resource):
             data = request.get_data() #get_json()
             logging.info(f"post observation: {data}")
             data_dict = xmltodict.parse(data)
-            print(json.dumps(data_dict))
+            #print(json.dumps(data_dict))
 
             ip = data_dict["EventNotificationAlert"]["ipAddress"]
             channel = data_dict["EventNotificationAlert"]["channelName"].replace(" ", "_")
             topic_prefix = "test.sputhan.finest.peoplecounter"
             topic = f"{topic_prefix}.{ip}.{channel}"
-            print(topic)
+            #print(topic)
             kafka_produce_peoplecounter_data(topic, json.dumps(data_dict))
             return success_response_object,success_code
 
