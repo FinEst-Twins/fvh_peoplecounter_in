@@ -6,7 +6,7 @@ from app import create_app
 #from app.models import PlatformUser   
 
 import redis
-from rq import Connection, Worker
+#from rq import Connection, Worker
 
 
 app = create_app()   
