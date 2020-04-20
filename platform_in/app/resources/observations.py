@@ -59,10 +59,9 @@ class PeopleCounterObservation(Resource):
         """
         Post new observation
         """
-        data = request.get_data() #get_json()
-        logging.info(f"post observation: {data}")
-        print(data)
         try:
+            data = request.get_data() #get_json()
+            logging.info(f"post observation: {data}")
             data_dict = xmltodict.parse(data)
             print(json.dumps(data_dict))
 
@@ -75,7 +74,7 @@ class PeopleCounterObservation(Resource):
             return success_response_object,success_code
 
         except Exception as e:
-            print("xml error", e)
+            print("error", e)
             elastic_apm.capture_exception()
             return failure_response_object,failure_code
 
