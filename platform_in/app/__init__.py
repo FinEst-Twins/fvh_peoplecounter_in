@@ -169,7 +169,7 @@ def create_app(script_info=None):
 
     #from app.resources.observations import observations_blueprint
     #app.register_blueprint(observations_blueprint)
-    value_schema = avro.loads(counter_data_schema)
+    value_schema = avro.load("avro/peoplecounterdata.avsc")
     #value = {"name": "Value"}
 
     avroProducer = AvroProducer(
@@ -201,16 +201,14 @@ def create_app(script_info=None):
         try:
             data = request.get_data() #get_json()
             logging.info(f"post observation: {data}")
-            data_dict = xmltodict.parse(data)
+            data_dict = xmltodict.parse(data, xml_attribs=False)
             print(json.dumps(data_dict))
 
             ip = data_dict["EventNotificationAlert"]["ipAddress"]
             channel = data_dict["EventNotificationAlert"]["channelName"].replace(" ", "_")
-            topic_prefix = "test.sputhan.finest.peoplecounter"
+            topic_prefix = "test.sputhan.peoplecounter"
             topic = f"{topic_prefix}.{ip}.{channel}"
-            #print(topic)
             kafka_avro_produce(avroProducer, topic, data_dict)
-            #kafka_produce_peoplecounter_data(topic, json.dumps(data_dict))
             return success_response_object,success_code
 
         except Exception as e:
