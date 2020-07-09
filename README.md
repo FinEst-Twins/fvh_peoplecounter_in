@@ -14,7 +14,7 @@ docker-compose -f docker-compose.prod.yml up
 
 example POST data:
 
-<?xml version="1.0" encoding="UTF-8"?>
+"<?xml version="1.0" encoding="UTF-8"?>
 <EventNotificationAlert version="1.0" xmlns="urn:psialliance-org">
 <ipAddress>10.60.108.22</ipAddress>
 <protocolType>HTTP</protocolType>
@@ -35,4 +35,4 @@ example POST data:
 <enter>0</enter>
 <exit>0</exit><pass>0</pass>
 </peopleCounting>
-</EventNotificationAlert>
+</EventNotificationAlert>"
