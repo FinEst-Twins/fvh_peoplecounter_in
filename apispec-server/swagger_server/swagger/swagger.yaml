@@ -20,9 +20,9 @@ paths:
     post:
       tags:
       - "Observations"
-      summary: "adds noise observations to UoP"
-      description: "Adds an item to the system"
-      operationId: "add_inventory"
+      summary: "adds count observations to UoP"
+      description: "Adds entry/exit/pass observations to the system"
+      operationId: "peoplecounter_v1_post"
       consumes:
       - "application/xml"
       produces:

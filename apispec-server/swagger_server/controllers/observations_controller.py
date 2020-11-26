@@ -5,10 +5,10 @@ from swagger_server.models.event_notification_alert import EventNotificationAler
 from swagger_server import util
 
 
-def add_inventory(EventNotificationAlert=None):  # noqa: E501
-    """adds noise observations to UoP
+def peoplecounter_v1_post(EventNotificationAlert=None):  # noqa: E501
+    """adds count observations to UoP
 
-    Adds an item to the system # noqa: E501
+    Adds entry/exit/pass observations to the system # noqa: E501
 
     :param EventNotificationAlert: Observations from Sensors
     :type EventNotificationAlert: dict | bytes

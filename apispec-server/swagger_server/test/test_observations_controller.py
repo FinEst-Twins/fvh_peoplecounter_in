@@ -12,10 +12,10 @@ from swagger_server.test import BaseTestCase
 class TestObservationsController(BaseTestCase):
     """ObservationsController integration test stubs"""
 
-    def test_add_inventory(self):
-        """Test case for add_inventory
+    def test_peoplecounter_v1_post(self):
+        """Test case for peoplecounter_v1_post
 
-        adds noise observations to UoP
+        adds count observations to UoP
         """
         EventNotificationAlert = EventNotificationAlert()
         response = self.client.open(
