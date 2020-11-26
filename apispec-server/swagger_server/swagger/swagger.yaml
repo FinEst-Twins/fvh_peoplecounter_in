@@ -1,0 +1,111 @@
+---
+swagger: "2.0"
+info:
+  description: "This API accepts counter input from people counter camera sensors"
+  version: "1.0.0"
+  title: "People Counter Observation API"
+  contact:
+    email: "sheena.puthanpurayil@forumvirium.fi"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "virtserver.swaggerhub.com"
+basePath: "/FinEst-Twins/peoplecounter/1.0.0"
+tags:
+- name: "Observations"
+schemes:
+- "https"
+paths:
+  /peoplecounter/v1:
+    post:
+      tags:
+      - "Observations"
+      summary: "adds noise observations to UoP"
+      description: "Adds an item to the system"
+      operationId: "add_inventory"
+      consumes:
+      - "application/xml"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "EventNotificationAlert"
+        description: "Observations from Sensors"
+        required: false
+        schema:
+          $ref: "#/definitions/EventNotificationAlert"
+      responses:
+        "201":
+          description: "item created"
+        "400":
+          description: "invalid input, object invalid"
+        "409":
+          description: "an existing item already exists"
+      x-swagger-router-controller: "swagger_server.controllers.observations_controller"
+definitions:
+  EventNotificationAlert:
+    type: "object"
+    properties:
+      ipAddress:
+        type: "string"
+        example: "0.2.1.0"
+      protocolType:
+        type: "string"
+        example: "http"
+      macAddress:
+        type: "string"
+        example: "xx:xx:xx:xx:xx:xx"
+      channelID:
+        type: "string"
+        example: "1"
+      dateTime:
+        type: "string"
+        format: "date-time"
+        example: "2020-04-19T17:35:00.000+0000"
+      activePostCount:
+        type: "string"
+        example: "1000"
+      eventType:
+        type: "string"
+        example: "5"
+      eventState:
+        type: "string"
+        example: "active"
+      eventDescription:
+        type: "string"
+      channelName:
+        type: "string"
+      peopleCounting:
+        $ref: "#/definitions/PeopleCounting"
+  PeopleCounting:
+    type: "object"
+    required:
+    - "enter"
+    - "exit"
+    - "pass"
+    - "statisticalMethods"
+    properties:
+      statisticalMethods:
+        type: "string"
+        example: "timeRange"
+      TimeRange:
+        $ref: "#/definitions/TimeRange"
+      enter:
+        type: "integer"
+        example: 1
+      exit:
+        type: "integer"
+        example: 1
+      pass:
+        type: "integer"
+        example: 1
+  TimeRange:
+    properties:
+      startTime:
+        type: "string"
+        format: "date-time"
+        example: "2020-04-19T17:35:00.000+0000"
+      endTime:
+        type: "string"
+        format: "date-time"
+        example: "2020-04-19T17:35:00.000+0000"
