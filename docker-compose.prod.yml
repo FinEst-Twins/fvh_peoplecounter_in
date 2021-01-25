@@ -11,7 +11,7 @@ services:
     expose:
       - 5002
     env_file:
-      - var.env
+      - config.env
     environment:
       - FLASK_APP=app/__init__.py
       - FLASK_ENV=production
@@ -20,6 +20,6 @@ services:
   nginx:
     build: ./nginx
     ports:
-      - 1337:80
+      - 1339:80
     depends_on:
       - peoplecounter_in_api

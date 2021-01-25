@@ -75,7 +75,7 @@ def create_app(script_info=None):
     @app.shell_context_processor
     def ctx():
         return {"app": app}
-    
+
     @app.route("/")
     def hello_world():
         return jsonify(health="ok")
@@ -87,9 +87,9 @@ def create_app(script_info=None):
             logging.debug(f"post observation: {data}")
             data_dict = xmltodict.parse(data, xml_attribs=False)
             ip = data_dict["EventNotificationAlert"]["ipAddress"]
-            channel = data_dict["EventNotificationAlert"]["channelName"].replace(" ", "_")
-            topic_prefix = "finest.peoplecounter"
-            topic = f"{topic_prefix}.{ip}.{channel}"
+            channel = data_dict["EventNotificationAlert"]["channelName"].replace(" ", ".")
+            topic_prefix = "finest.rawdata.peoplecounter"
+            topic = f"{topic_prefix}"
             kafka_avro_produce(avroProducer, topic, data_dict)
             return success_response_object,success_code
 
