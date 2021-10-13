@@ -1,0 +1,15 @@
+{
+    "type": "record",
+    "name": "example",
+    "namespace": "example",
+    "fields": [
+        {
+            "namespace": "test",
+            "type": "int",
+            "name": "test",
+            "default": 5,
+            "doc": "my test number"
+        }
+    ],
+    "doc": "example"
+}

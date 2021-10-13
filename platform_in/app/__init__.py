@@ -10,8 +10,13 @@ from confluent_kafka import avro
 from confluent_kafka.avro import AvroProducer
 import xmltodict
 import certifi
+import sentry_sdk
 
-logging.basicConfig(level=logging.INFO)
+from sentry_sdk.integrations.flask import FlaskIntegration
+
+if os.getenv("SENTRY_DSN"):
+    sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
+
 elastic_apm = ElasticAPM()
 # print(app.config, file=sys.stderr)
 
@@ -52,6 +57,10 @@ def create_app(script_info=None):
     app_settings = os.getenv("APP_SETTINGS")
     app.config.from_object(app_settings)
 
+
+    logging.basicConfig(level=app.config["LOG_LEVEL"])
+    logging.getLogger().setLevel(app.config["LOG_LEVEL"])
+
     # set up extensions
     elastic_apm.init_app(app)
 
@@ -79,6 +88,10 @@ def create_app(script_info=None):
     @app.route("/")
     def hello_world():
         return jsonify(health="ok")
+
+    @app.route("/debug-sentry")
+    def trigger_error():
+        division_by_zero = 1 / 0
 
     @app.route('/peoplecounter/v1/', methods=['POST'])
     def post_peoplecounter_data():

@@ -6,10 +6,8 @@ services:
     build:
         context: ./platform_in/
         dockerfile: Dockerfile.prod
-    entrypoint: ['/project/entrypoint.sh']
-    command: gunicorn --bind 0.0.0.0:5002 manage:app
     expose:
-      - 5002
+      - 5000
     env_file:
       - config.env
     environment:
