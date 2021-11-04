@@ -15,21 +15,25 @@ import sentry_sdk
 from sentry_sdk.integrations.flask import FlaskIntegration
 
 if os.getenv("SENTRY_DSN"):
-    sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
+    sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"),
+                    integrations=[FlaskIntegration()])
 
 elastic_apm = ElasticAPM()
 # print(app.config, file=sys.stderr)
 
-success_response_object = {"status":"success"}
+success_response_object = {"status": "success"}
 success_code = 202
-failure_response_object = {"status":"failure"}
+failure_response_object = {"status": "failure"}
 failure_code = 400
+
 
 def delivery_report(err, msg):
     if err is not None:
         logging.error(f"Message delivery failed: {err}")
     else:
-        logging.debug(f"Message delivered to {msg.topic()} [{msg.partition()}]")
+        logging.debug(
+            f"Message delivered to {msg.topic()} [{msg.partition()}]")
+
 
 def kafka_avro_produce(avroProducer, topic, data):
 
@@ -48,6 +52,7 @@ def kafka_avro_produce(avroProducer, topic, data):
 
     return True
 
+
 def create_app(script_info=None):
 
     # instantiate the app
@@ -56,7 +61,6 @@ def create_app(script_info=None):
     # set config
     app_settings = os.getenv("APP_SETTINGS")
     app.config.from_object(app_settings)
-
 
     logging.basicConfig(level=app.config["LOG_LEVEL"])
     logging.getLogger().setLevel(app.config["LOG_LEVEL"])
@@ -73,9 +77,9 @@ def create_app(script_info=None):
             "sasl.username": app.config["SASL_UNAME"],
             "sasl.password": app.config["SASL_PASSWORD"],
             "ssl.ca.location": certifi.where(),
-            #"debug": "security,cgrp,fetch,topic,broker,protocol",
+            # "debug": "security,cgrp,fetch,topic,broker,protocol",
             "on_delivery": delivery_report,
-            "schema.registry.url": app.config["SCHEMA_REGISTRY_URL"] ,
+            "schema.registry.url": app.config["SCHEMA_REGISTRY_URL"],
         },
         default_value_schema=value_schema,
     )
@@ -100,11 +104,12 @@ def create_app(script_info=None):
             logging.debug(f"post observation: {data}")
             data_dict = xmltodict.parse(data, xml_attribs=False)
             ip = data_dict["EventNotificationAlert"]["ipAddress"]
-            channel = data_dict["EventNotificationAlert"]["channelName"].replace(" ", ".")
+            channel = data_dict["EventNotificationAlert"]["channelName"].replace(
+                " ", ".")
             topic_prefix = "finest.rawdata.peoplecounter"
             topic = f"{topic_prefix}"
             kafka_avro_produce(avroProducer, topic, data_dict)
-            return success_response_object,success_code
+            return success_response_object, success_code
 
         except Exception as e:
             avroProducer.flush()
@@ -112,4 +117,3 @@ def create_app(script_info=None):
             elastic_apm.capture_exception()
 
     return app
-

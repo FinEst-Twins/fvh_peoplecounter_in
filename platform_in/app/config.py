@@ -12,7 +12,6 @@ def get_env_variable(name):
         raise Exception(message)
 
 
-
 class Config(object):
 
     SECRET_KEY = os.environ.get("SECRET_KEY") or "super-secret-key"
@@ -30,30 +29,31 @@ class Config(object):
         'SERVICE_NAME': get_env_variable("ELASTIC_SERVICE_NAME"),
         'SECRET_TOKEN': get_env_variable("ELASTIC_SECRET_TOKEN"),
         'SERVER_URL': get_env_variable("ELASTIC_SERVER_URL"),
-        'DEBUG':True
+        'DEBUG': True
     }
 
     ll = get_env_variable("LOG_LEVEL")
     try:
 
-        LOG_LEVEL = {0: logging.ERROR, 1: logging.WARN, 2: logging.INFO}[int(ll)]
+        LOG_LEVEL = {0: logging.ERROR,
+                     1: logging.WARN, 2: logging.INFO}[int(ll)]
     except KeyError:
         LOG_LEVEL = logging.DEBUG
+
 
 class ProductionConfig(Config):
     DEBUG = False
     SECRET_KEY = os.environ.get("SECRET_KEY")
+
 
 class DevelopmentConfig(Config):
     DEVELOPMENT = True
     TESTING = False
     DEBUG = True
     SECRET_KEY = os.environ.get("SECRET_KEY")
-    #ELASTIC_APM['DEBUG']=True
+    # ELASTIC_APM['DEBUG']=True
 
 
 class TestingConfig(Config):
     TESTING = True
     SECRET_KEY = os.environ.get("SECRET_KEY")
-
-
