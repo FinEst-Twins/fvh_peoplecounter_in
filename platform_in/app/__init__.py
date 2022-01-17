@@ -67,6 +67,8 @@ def create_app(script_info=None):
 
     # set up extensions
     elastic_apm.init_app(app)
+    if os.getenv("USE_ELASTIC"):
+        elastic_apm.init_app(app)
 
     value_schema = avro.load("avro/peoplecounterdata.avsc")
     avroProducer = AvroProducer(
@@ -114,6 +116,8 @@ def create_app(script_info=None):
         except Exception as e:
             avroProducer.flush()
             logging.error("post data error", e)
-            elastic_apm.capture_exception()
+            # capture elastic exception, if env USE_ELASTIC is set
+            if os.getenv("USE_ELASTIC"):
+                elastic_apm.capture_exception()
 
     return app
