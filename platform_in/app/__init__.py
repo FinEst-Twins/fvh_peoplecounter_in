@@ -18,7 +18,8 @@ if os.getenv("SENTRY_DSN"):
     sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"),
                     integrations=[FlaskIntegration()])
 
-elastic_apm = ElasticAPM()
+if os.getenv("USE_ELASTIC"):
+    elastic_apm = ElasticAPM()
 # print(app.config, file=sys.stderr)
 
 success_response_object = {"status": "success"}
@@ -66,7 +67,6 @@ def create_app(script_info=None):
     logging.getLogger().setLevel(app.config["LOG_LEVEL"])
 
     # set up extensions
-    elastic_apm.init_app(app)
     if os.getenv("USE_ELASTIC"):
         elastic_apm.init_app(app)
 
